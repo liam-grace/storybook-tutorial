@@ -1,0 +1,73 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { Task, ITask } from './Task';
+
+interface TaskListProps {
+    tasks: ITask[],
+    loading: boolean;
+    onPinTask: (id: string) => void,
+    onArchiveTask: (id: string) => void,
+}
+
+export const TaskList = ({loading, tasks, onPinTask, onArchiveTask}: TaskListProps) => {
+    const events = {onPinTask, onArchiveTask};
+
+    const LoadingRow = (
+        <div className="loading-item">
+            <span className="glow-textbox" />
+            <span className="glow-text" >
+                <span>Loading</span> <span>cool</span> <span>state</span>
+            </span>
+        </div>
+    );
+
+    if (loading) {
+        return (
+            <div className="list-items" data-testid="loading" key={"loading"}>
+                {LoadingRow}
+                {LoadingRow}
+                {LoadingRow}
+                {LoadingRow}
+                {LoadingRow}
+                {LoadingRow}
+            </div>
+        );
+    }
+
+    if (tasks.length === 0) {
+        return (
+            <div className="list-items">
+                <div className="wrapper-message">
+                    <span className="icon-check"/>
+                    <span className="title-message">You have no tasks</span><br />
+                    <span className="subtle-message">Sit back and relax</span>
+                </div>
+            </div>
+        );
+    }
+
+    const tasksInOrder = [
+        ...tasks.filter(t => t.state === 'TASK_PINNED'),
+        ...tasks.filter(t => t.state !== 'TASK_PINNED'),
+    ];
+
+    return (
+        <div className="list-items">
+            {tasksInOrder.map(task => (
+                <Task key={task.id} task={task} {...events} />
+            ))}
+        </div>
+    );
+};
+
+TaskList.propTypes = {
+    loading: PropTypes.bool,
+    tasks: PropTypes.arrayOf(Task.propTypes.task).isRequired,
+    onPinTask: PropTypes.func,
+    onArchiveTask: PropTypes.func
+};
+
+TaskList.defaultProps = {
+    loading: false
+};
