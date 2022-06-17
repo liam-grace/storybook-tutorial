@@ -1,16 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Task, ITask } from './Task';
+import { Task } from './Task';
 import { useDispatch, useSelector } from 'react-redux';
 import { TasksState, UpdateTaskDispatch, updateTaskState } from '../lib/store';
-
-interface TaskListProps {
-    tasks: ITask[],
-    loading: boolean;
-    onPinTask: (id: string) => void,
-    onArchiveTask: (id: string) => void,
-}
 
 // export const TaskList = ({loading, tasks, onPinTask, onArchiveTask}: TaskListProps) => {
 export const TaskList = () => {
